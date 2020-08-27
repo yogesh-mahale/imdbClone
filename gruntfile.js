@@ -1,144 +1,122 @@
-'use strict';
+//Grunt is just JavaScript running in node, after all...
+//var Dgeni = require('dgeni');
 
 module.exports = function(grunt) {
-    // Project Configuration
+    // All upfront config goes in a massive nested object.
     grunt.initConfig({
+        // You can set arbitrary key-value pairs.
+        distFolder: 'dist',
+        // You can also set the value of a key as parsed JSON.
+        // Allows us to reference properties we declared in package.json.
         pkg: grunt.file.readJSON('package.json'),
-        watch: {
-            jade: {
-                files: ['app/views/**'],
-                options: {
-                    livereload: true,
-                },
-            },
-            js: {
-                files: ['public/js/**', 'app/**/*.js', 'config/**/*.js'],
-                tasks: ['jshint'],
-                options: {
-                    livereload: true,
-                },
-            },
-            html: {
-                files: ['public/views/**'],
-                options: {
-                    livereload: true,
-                },
-            },
-            css: {
-                files: ['public/css/**'],
-                options: {
-                    livereload: true
-                }
-            }
-        },
-        jshint: {
-            all:['gruntfile.js', 'public/js/**/*.js', 'test/mocha/**/*.js', 'test/karma/**/*.js', 'app/**/*.js'],
-            options: {
-                jshintrc: '.jshintrc',
-                reporter: require('jshint-stylish')
-            }
-        },
-        copy: {
-            options: {
-                punctuation: ''
-            },
-            js: {
-                files: [
-                    {cwd: 'bower_components/angular-bootstrap', src: ['**/*.js'], dest: 'public/lib/angular-bootstrap', expand: true},
-                    {cwd: 'bower_components/angular-cookies',   src: ['angular-cookies*'], dest: 'public/lib/angular-cookies',   expand: true}, 
-                    {cwd: 'bower_components/angular-mocks',     src: ['**/*.js'], dest: 'public/lib/angular-mocks',     expand: true},
-                    {cwd: 'bower_components/angular-resource',  src: ['angular-resource*'], dest: 'public/lib/angular-resource',  expand: true},
-                    {cwd: 'bower_components/angular-route',     src: ['angular-route*'], dest: 'public/lib/angular-route',     expand: true},                    
-                    {cwd: 'bower_components/angular',   src: ['angular*'], dest: 'public/lib/angular',           expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/demo',                      src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/demo',                         expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/test',                      src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/test',                         expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules',                   src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules',                      expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/event',             src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/event',                expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/format',            src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/format',               expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/highlight',         src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/highlight',            expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/ie-shiv',           src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/ie-shiv',              expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/indeterminate',     src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/indeterminate',        expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/inflector',         src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/inflector',            expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/jq',                src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/jq',                   expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/keypress',          src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/keypress',             expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/mask',              src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/mask',                 expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/reset',             src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/reset',                expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/reset/stylesheets', src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/reset/stylesheets',    expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/route',             src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/route',                expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/scrollfix',         src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/scrollfix',            expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/showhide',          src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/showhide',             expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/unique',            src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/unique',               expand: true},
-                    {cwd: 'bower_components/angular-ui-utils/modules/validate',          src: ['**/*.js'], dest: 'public/lib/angular-ui-utils/modules/validate',             expand: true},
-                    {cwd: 'bower_components/bootstrap/js',                               src: ['*.js'],    dest: 'public/lib/bootstrap/js', expand: true},
-                    {cwd: 'bower_components/bootstrap/less',                             src: ['*.less'],  dest: 'public/lib/bootstrap/less', expand: true},
-                    {cwd: 'bower_components/bootstrap/docs/assets/css',                  src: ['*.*'],    dest: 'public/lib/bootstrap/docs/assets/css', expand: true},
-                    {cwd: 'bower_components/bootstrap/docs/assets/ico',                  src: ['*.*'],    dest: 'public/lib/bootstrap/docs/assets/ico', expand: true},
-                    {cwd: 'bower_components/bootstrap/docs/assets/img',                  src: ['*.*'],    dest: 'public/lib/bootstrap/docs/assets/img', expand: true},
-                    {cwd: 'bower_components/bootstrap/docs/assets/js',                   src: ['*.*'],    dest: 'public/lib/bootstrap/docs/assets/js', expand: true},
-                    {cwd: 'bower_components/satellizer/dist',                            src: ['**/*.js'],    dest: 'public/lib/satellizer', expand: true},
-                    {cwd: 'bower_components/angular-fblogin/dist',                       src: ['**/*.js'],    dest: 'public/lib/social', expand: true},
-                    {cwd: 'bower_components/jquery',                                     src: ['jquery*'], dest: 'public/lib/jquery', expand: true},
-                    {cwd: 'bower_components/angular-ui-router',                          src: ['release/*.js'], dest: 'public/lib/angular-ui-router', expand: true}
+        // Grunt tasks are associated with specific properties.
 
-                ]
-            }
-        },
-        nodemon: {
-            dev: {
-                script: 'app.js',
-                options: {
-                    args: ['--color'],
-                    ignore: ['README.md', 'node_modules/**', '.DS_Store'],
-                    ext: 'js',
-                    watch: ['app', 'config', 'app.js', 'gruntfile.js'],
-                    delay: 1000,
-                    env: {
-                        PORT: 3000
-                    },
-                    cwd: __dirname
+        ngAnnotate: {
+            options: {
+                singleQuotes: true
+            },
+            header: {
+                files: {
+                    'public/js/imdb-minsafe-header.js': [
+                        'public/assets/ui-select2/isteven-multi-select.js',
+                        'public/assets/ui-notification/ui-notification.js',
+                        'public/assets/ui-select2/isteven-multi-select.js',
+                        'public/assets/angular-bootstrap/ui-bootstrap-tpls.js'
+                    ]
+                }
+            },
+            footer: {
+                files: {
+                    'public/js/imdb-minsafe-footer.js': [
+                        'public/js/app.js',
+                        'public/js/config.js',
+                        'public/js/directives.js',
+                        'public/js/filters.js',
+                        'public/js/services/**/*.js',
+                        'public/js/controllers/**/*.js'
+                    ]
                 }
             }
         },
-        concurrent: {
-            tasks: ['nodemon', 'watch'],
-            options: {
-                logConcurrentOutput: true
-            }
-        },
-        mochaTest: {
-            options: {
-                reporter: 'spec'
+        concat: {
+            header: { //target
+                src: ['public/js/imdb-minsafe-header.js'],
+                dest: 'public/js/imdb-concat-header.min.js'
             },
-            src: ['test/mocha/**/*.js']
-        },
-        env: {
-            test: {
-                NODE_ENV: 'test'
+            footer: { //target
+                src: ['public/js/imdb-minsafe-footer.js'],
+                dest: 'public/js/imdb-concat-footer.min.js'
             }
         },
-        karma: {
-            unit: {
-                configFile: 'test/karma/karma.conf.js'
+        uglify: {
+            header: { //target
+                src: ['public/js/imdb-concat-header.min.js'],
+                dest: 'public/js/imdb-uglify-header.min.js'
+            },
+            footer: { //target
+                src: ['public/js/imdb-concat-footer.min.js'],
+                dest: 'public/js/imdb-uglify-footer.min.js'
+            }
+        },
+
+        // these names generally match their npm package name.
+        cssmin: {
+            // Specify some options, usually specific to each plugin.
+            options: {
+                style: 'compressed',
+                sourcemap: true
+            },
+            assets_css: {
+                files: {
+                    'public/assets/imdb-assets.min.css': [
+                        'public/assets/ui-notification/notification.css',
+                        'public/assets/highlight/styles/github.css',
+                        'public/assets/ui-select2/isteven-multi-select.css',
+                        'public/assets/angular-bootstrap/ui-bootstrap-csp.css',
+                        'public/assets/nvd3/build/nv.d3.css',
+                        'public/assets/draggable/dragular.css',
+                        'public/assets/draggable/examples.css',
+                        'public/assets/ng-bs-daterangepicker/bootstrap-daterangepicker/daterangepicker-bs3.css'
+                    ]
+                }
+            }
+        },
+
+        watch: {
+            js: {
+                files:[
+                    'public/js/**/*',
+                    '!public/js/imdb-minsafe-header.js',
+                    '!public/js/imdb-minsafe-footer.js',
+                    '!public/js/imdb-concat-header.min.js',
+                    '!public/js/imdb-concat-footer.min.js',
+                    '!public/js/imdb-uglify-header.min.js',
+                    '!public/js/imdb-uglify-footer.min.js'
+                ],
+                tasks: ['ngAnnotate','concat']
+            },
+
+            css: {
+                files: [
+                    'public/css/common.css'
+                ],
+                tasks: ['cssmin']
             }
         }
     });
 
-    //Load NPM tasks
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify-es');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-nodemon');
-    grunt.loadNpmTasks('grunt-concurrent');
-    grunt.loadNpmTasks('grunt-mocha-test');
-    grunt.loadNpmTasks('grunt-karma');
-    grunt.loadNpmTasks('grunt-env');
-    grunt.loadNpmTasks('grunt-copy');
+    grunt.loadNpmTasks('grunt-ng-annotate');
 
-    //Making grunt default to force in order not to break the project.
-    grunt.option('force', true);
+    //grunt.registerTask('dgeni', 'Generate docs via dgeni.', function() {
+    //    var done = this.async();
+    //    var dgeni = new Dgeni([require('./docs/config')]);
+    //    dgeni.generate().then(done);
+    //});
 
-    //Default task(s).
-    grunt.registerTask('default', ['copy', 'jshint', 'concurrent']);
-
-    //Test task.
-    grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
+    grunt.registerTask('imdb-prod', ['ngAnnotate', 'concat', 'uglify', 'cssmin']);
+    grunt.registerTask('imdb', ['ngAnnotate', 'concat',  'cssmin', 'watch']);
 };
