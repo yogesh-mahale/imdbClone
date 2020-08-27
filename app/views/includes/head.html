@@ -1,0 +1,63 @@
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>IMDB</title>
+
+    <!-- Styles Sheets -->
+
+    <link href='/img/icons/favicon.ico' rel='shortcut icon' type='image/x-icon'>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto+Condensed:400,700|Roboto:400,700" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <!-- Javascripts -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+    <script type="text/javascript" src='assets/lodash/lodash.min.js'></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js" integrity="sha512-jiG+LwJB0bmXdn4byKzWH6whPpnLy1pnGA/p3VCXFLk4IJ/Ftfcb22katPTapt35Q6kwrlnRheK6UPOIdJhYTA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.8.0/angular-route.min.js" integrity="sha512-KgQeEw8J2b0mJH/09XwcsYPr0koz6wqhHR4Kpii/4Tjayshk4swTbyGpWRCPpQQlP/4kJEXGqBXsXgkL+wPTpw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.8.0/angular-resource.min.js" integrity="sha512-GsRfQINAWRqwFAkFWzvEOzSzGq1x7YndmVhOUCxc+v9+XCX2MMDN5RxZwSYMFliuAusafx2FAl8AoTNdrmAMqw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-animate/1.8.0/angular-animate.min.js" integrity="sha512-8THct7umrROaYLOPHjXppUo3U0PCWqJ/Jjof8tHVtNGIztZKwvU23+FQq0A5m7kDmUpPlNr8aSe1+nvIA+TlOA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-aria/1.8.0/angular-aria.min.js" integrity="sha512-esoy+H6Yh7FSCwoySxVke2TUTt1udN07xtwGsPj5FGUjq6hgv2f3zZ+8aNmIPSY3CzhAJEsrRpWfp7qZ+58Xww==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.8.0/angular-messages.min.js" integrity="sha512-VDnDg2zzPdNBQf0aO5Hqwnili5SX7JKq9cQFIaD2VvA1l9PhZwN/BrTd0bDDdWh1kfEFzpkPMCfTPu3yE1wIkA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.8.0/angular-sanitize.min.js" integrity="sha512-ZKFv9PnfnRmoBms0LvWmODQW9dXBwualot+o5RowVKQAxxY/6t/El/qTM9E+U+EB5+xcrxxDvhcUcTYBw/kbiQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.28/angular-ui-router.min.js" integrity="sha512-2DoNBBUJq5Wr+Uhjgol+uvmHtxOgrtG1QjuDHltKMdtIiVEhujUi0eb/X21P+P0V9zgXKA/lOKCSq7wj5VYc5A==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-cookies/1.8.0/angular-cookies.min.js" integrity="sha512-51UjXJtYlTrbtW778eKUgm3AcnUo364Hl/HQkrCKYS1kZ7YYGkl9B49l+oY8SaDAjqDg8CR68/0ThjS+HRC/hQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.6/ui-bootstrap.js" integrity="sha512-3z5zbCPEG7DvKKz46yvPmKL+w+UDfwY0f2YWFVIwBb+2Y4E23jTZHZxG+naAiTllvMNQAhapPDKGHBT7V3fQOA==" crossorigin="anonymous"></script>
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/1.3.0/angular-moment.min.js"  crossorigin="anonymous"></script>-->
+
+    <!--<script src="/assets/angular-component/angular.min.js"></script>
+    <script src="public/assets/angular-moment/angular-moment.min.js"></script>
+    <script src="/assets/angular-component/angular-animate.min.js"></script>
+    <script src="/assets/angular-component/angular-aria.min.js"></script>
+    <script src="/assets/angular-component/angular-messages.min.js"></script>
+    <script src="/assets/angular-component/angular-sanitize.min.js"></script>
+    <script src="/assets/angular-route/angular-route.js"></script>-->
+
+
+
+
+    <!--Moment picker-->
+    <!--<script src="/assets/cdn/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/assets/cdn/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="/assets/moment-picker/moment-picker.js"></script>-->
+
+    <!-- APP JS -->
+    <script type="text/javascript" src="/js/imdb-concat-header.min.js"></script>
+    <script type="text/javascript" src="/js/imdb-concat-footer.min.js"></script>
+
+</head>
+
+

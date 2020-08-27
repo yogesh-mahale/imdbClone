@@ -1,0 +1,36 @@
+<style type="text/css">
+    .card_error {
+        background: #FFFFFF;
+        border: 2px solid #E0E0E0;
+        width:780px;
+        margin:20px auto;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .card_error .error_title {
+        font-family: "Roboto",sans-serif;
+        font-weight: 400;
+        font-size: 24px;
+        color: #0074A6;
+        letter-spacing: 0;
+        margin-bottom: 40px;
+    }
+
+    .card_error .error_heading {
+        font-family: "Roboto",sans-serif;
+        font-weight: bold;
+        font-size: 52px;
+        color: red;
+        letter-spacing: 0;
+        margin-bottom: 15px;
+    }
+</style>
+
+<section class="card_error">
+    <h1 class="error_heading">500</h1>
+    <h1 class="error_title">Oops something went wrong 505</h1>
+    <section>
+      <code> <%= error %></code>
+    </section>
+</section>
