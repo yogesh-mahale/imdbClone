@@ -45,7 +45,9 @@ module.exports = function(app, passport) {
 
     //Set views path, template engine and default layout
     app.set('views', config.root + '/app/views');
-    app.set('view engine', 'jade');
+
+    app.engine('html', require('ejs').renderFile);
+    app.set('view engine', 'html');
 
     //Enable jsonp
     app.enable("jsonp callback");
@@ -54,8 +56,8 @@ module.exports = function(app, passport) {
     app.use(cookieParser());
 
     // request body parsing middleware should be above methodOverride
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+    app.use(bodyParser.json({ extended: true, limit: '10mb' }));
     app.use(methodOverride());
 
     //express session configuration
@@ -76,9 +78,9 @@ module.exports = function(app, passport) {
       require(path.resolve(routePath))(app);
     });
 
-    app.get('*',  function (req, res, next) {
-            res.render('index');
-    });
+    // app.get('*',  function (req, res, next) {
+    //     res.render('index');
+    // });
 
     app.use(function(err, req, res, next) {
 
