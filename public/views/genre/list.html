@@ -1,0 +1,71 @@
+<div class="container p-3" ng-controller="MovieController as movieCtrl" ng-init="movieCtrl.initGenreList()">
+    <div class="row">
+        <div class="col-12">
+            <div class="row mb-3">
+                <div class="col-6">
+                    <h5>Genre</h5>
+                </div>
+                <div class="col-6 text-right">
+                    <div class="btn-toolbar pull-right" role="toolbar">
+                        <div class="dropdown ml-2">
+                            <button class="btn btn-primary dropdown-toggle" type="button"
+                                    id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Create
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenu2">
+                                <a href="javascript:" type="button" class="dropdown-item" ui-sref="movies.add">
+                                    Add Movies
+                                </a>
+                                <a href="javascript:" type="button" class="dropdown-item" ui-sref="movies.add">
+                                    Add Genre
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th class="sortable">
+                            Genre name
+                        </th>
+                        <th scope="col">
+                            Status
+                        </th>
+                        <th scope="col" colspan="1">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in movieCtrl.genres track by $index">
+                        <th scope="row">{{ $index + 1 }}</th>
+                        <td>{{ item.name }}</td>
+                        <td><span class="badge badge-success" ng-if="item.status">Active</span> </td>
+                        <td>
+                            <a href="javascript:">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <pagination
+                class="pagination justify-content-end"
+                total-items="movieCtrl.pagination.movie.count"
+                page="movieCtrl.pagination.movie.page"
+                max-size="maxSize"
+                num-pages="movieCtrl.pagination.movie.pages"
+                items-per-page="movieCtrl.pagination.movie.limitPerPage"
+                on-select-page="movieCtrl.loadMoreMovies(page)"
+                boundary-links="true"
+                rotate="false">
+            </pagination>
+        </div>
+    </div>
+</div>
+
