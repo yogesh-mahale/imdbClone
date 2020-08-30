@@ -1,0 +1,30 @@
+
+<section class="mt-5" ng-init="movieCtrl.initEditGenre()">
+    <div class="card m-auto" style="width: 450px;">
+
+        <div class="card-body">
+            <h5>Add Genre</h5>
+            <hr>
+            <form name="genreForm"
+                  ng-class="{'was-validated': (genreForm.$invalid || genreForm.$submitted)}"
+                  ng-submit="movieCtrl.submitGenre(genreForm)" ng-cloak novalidate>
+                <div class="form-group">
+                    <label for="genreName">Name</label>
+                    <input type="text"
+                           id="genreName"
+                           name="name"
+                           class="form-control"
+                           placeholder="Enter genre name"
+                           data-ng-model="movieCtrl.genre.name"
+                           ng-required="true">
+                    <div class="form-error invalid-feedback"
+                         ng-messages="genreForm.name.$error"
+                         ng-if="genreForm.name.$dirty || genreForm.$submitted">
+                        <div ng-messages-include="form_errors.html"></div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</section>
