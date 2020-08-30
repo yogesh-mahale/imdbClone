@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang='en' data-ng-app="imdbApp">
 
     <%- include('./../includes/head.html') %>
 
-    <body class="sidebar-mini sidebar-collapse" data-ng-app="imdbApp">
+    <body class="sidebar-mini sidebar-collapse" data-ng-controller="MainController as mainCtrl">
         <%- include('./../includes/header-layout.html') %>
 
         <div class="wrapper">
@@ -11,6 +11,12 @@
                 <section data-ui-view></section>
             </div>
         </div>
+
+        <% if(user) { %>
+            <script type="text/javascript">
+                window.user = <%-user%>;
+            </script>
+        <% } %>
     </body>
 </html>
 
