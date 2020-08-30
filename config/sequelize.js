@@ -49,6 +49,10 @@ Object.keys(db).forEach(function (modelName) {
     if (db[modelName].options.hasOwnProperty('associate')) {
         db[modelName].options.associate(db)
     }
+
+    if (db[modelName].options.hasOwnProperty('loadScopes')) {
+        db[modelName].options.loadScopes(db)
+    }
 });
 
 // Synchronizing any model changes with database. 
