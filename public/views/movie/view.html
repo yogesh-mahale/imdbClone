@@ -1,0 +1,25 @@
+
+<section class="mt-5" ng-init="movieCtrl.viewMovie()">
+    <div class="card m-auto" style="width: 450px;">
+
+        <div class="card-body">
+            <h5>Movie Details</h5>
+            <hr>
+            <div class="card mb-3">
+                <img class="card-img-top" src="{{ movieCtrl.defaultImg }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ movieCtrl.movie.name }}</h5>
+                    <p class="card-text">Popularity: {{ movieCtrl.movie.popularity }}</p>
+                    <p class="card-text">Imdb Score: {{ movieCtrl.movie.imdbScore }}</p>
+                    <p class="card-text">Director: {{ movieCtrl.movie.director }}</p>
+                    <p class="card-text">Writer:  {{ movieCtrl.movie.writer }}</p>
+                    <p class="card-text">Cast: {{ movieCtrl.movie.cast }}</p>
+                    <hr>
+                    <span class="badge badge-info mr-1" ng-repeat="genre in movieCtrl.movie.Movie_genres track by $index">
+                        {{ genre.Genre.name }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
