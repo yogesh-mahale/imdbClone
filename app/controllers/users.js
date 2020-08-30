@@ -63,6 +63,7 @@ exports.create = function (req, res, next) {
     user.provider = 'local';
     user.salt = user.makeSalt();
     user.hashedPassword = user.encryptPassword(req.body.password, user.salt);
+    user.apiKey = encodeURIComponent(user.hashedPassword);
     console.log('New User (local) : { id: ' + user.id + ' username: ' + user.username + ' }');
 
     user.save().then(function () {
@@ -74,10 +75,7 @@ exports.create = function (req, res, next) {
             // res.redirect('/');
         });
     }).catch(function (err) {
-        res.render('users/signup', {
-            message: message,
-            user: user
-        });
+        return res.send({status: 'success', message: message, user: user});
     });
 };
 
