@@ -1,0 +1,161 @@
+<div class="container p-3" ng-controller="MovieController as movieCtrl" ng-init="movieCtrl.initMovieList()">
+    <div class="row">
+        <div class="col-12">
+            <div class="row mb-3">
+                <div class="col-6">
+                    <h5>Movies</h5>
+                </div>
+                <div class="col-6 text-right">
+                    <div class="btn-toolbar pull-right" role="toolbar">
+                        <div class="input-group search-wrapper">
+                            <input type="text" name="query" data-ng-model="movieCtrl.filter.movie.query" class="form-control" placeholder="Search by name...">
+                            <div class="input-group-append">
+                                <button class="btn input-group-text" ng-show="movieCtrl.filter.movie.query" ng-click="movieCtrl.searchMovies({'reset': true})">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                                <button class="btn input-group-text" id="contentHeaderSearch" ng-click="movieCtrl.searchMovies()">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dropdown ml-2">
+                            <button class="btn btn-primary dropdown-toggle" type="button"
+                                    id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Create
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" data-ng-click="openFilter()"><i class="fa fa-filter"></i> Filter</button>
+                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenu2">
+                                <a href="javascript:" type="button" class="dropdown-item" ui-sref="movies.add">
+                                    Add Movies
+                                </a>
+                                <a href="javascript:" type="button" class="dropdown-item" ui-sref="genres.add">
+                                    Add Genre
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th class="sortable"
+                            sort
+                            by="order"
+                            reverse="reverse"
+                            column-name="'name'"
+                            order-by="movieCtrl.pagination.movie.orderBy"
+                            on-click="movieCtrl.sortMovies(options)"> <!-- note: options variable comes from directive. data is passed from directive as object and object key is considered here-->
+                            Name
+                        </th>
+                        <th scope="col"
+                            class="sortable"
+                            sort
+                            by="order"
+                            reverse="reverse"
+                            column-name="'director'"
+                            order-by="movieCtrl.pagination.movie.orderBy"
+                            on-click="movieCtrl.sortMovies(options)"
+                        >
+                            Director
+                        </th>
+                        <th scope="col"
+                            class="sortable"
+                            sort
+                            by="order"
+                            reverse="reverse"
+                            column-name="'popularity'"
+                            order-by="movieCtrl.pagination.movie.orderBy"
+                            on-click="movieCtrl.sortMovies(options)"
+                        >
+                            Popularity
+                        </th>
+                        <th scope="col"
+                            class="sortable"
+                            sort
+                            by="order"
+                            reverse="reverse"
+                            column-name="'imdbScore'"
+                            order-by="movieCtrl.pagination.movie.orderBy"
+                            on-click="movieCtrl.sortMovies(options)"
+                        >
+                            Score
+                        </th>
+                        <th scope="col"
+                            class="sortable"
+                            sort
+                            by="order"
+                            reverse="reverse"
+                            column-name="'addedBy'"
+                            order-by="movieCtrl.pagination.movie.orderBy"
+                            on-click="movieCtrl.sortMovies(options)"
+                        >
+                            Added By
+                        </th>
+                        <th scope="col"
+                            class="sortable"
+                            sort
+                            by="order"
+                            reverse="reverse"
+                            column-name="'updatedBy'"
+                            order-by="movieCtrl.pagination.movie.orderBy"
+                            on-click="movieCtrl.sortMovies(options)"
+                        >
+                            Updated
+                        </th>
+                        <th scope="col">Genre</th>
+                        <th scope="col" colspan="3">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in movieCtrl.movies track by $index">
+                        <th scope="row">{{ $index + 1 }}</th>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.director }}</td>
+                        <td>{{ item.popularity }}</td>
+                        <td>{{ item.imdbScore }}</td>
+                        <td>{{ item.AddedByUser.name }}</td>
+                        <td>{{ item.UpdatedByUser.name }}</td>
+                        <td>
+                            <span class="badge badge-info mr-1" ng-repeat="genre in item.Movie_genres track by $index">
+                                {{ genre.Genre.name }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="javascript:" ui-sref="movies.view({movieId: item.id})">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:" ui-sref="movies.edit({movieId: item.id})">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:" ng-click="movieCtrl.deleteMovie(item.id)">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <pagination
+                class="pagination justify-content-end"
+                total-items="movieCtrl.pagination.movie.count"
+                page="movieCtrl.pagination.movie.page"
+                max-size="maxSize"
+                num-pages="movieCtrl.pagination.movie.pages"
+                items-per-page="movieCtrl.pagination.movie.limitPerPage"
+                on-select-page="movieCtrl.loadMoreMovies(page)"
+                boundary-links="true"
+                rotate="false">
+            </pagination>
+        </div>
+    </div>
+</div>
+
