@@ -1,0 +1,105 @@
+
+<section class="mt-5" ng-init="movieCtrl.initEditMovie()">
+    <div class="card m-auto" style="width: 450px;">
+
+        <div class="card-body">
+            <h5>Add Movie</h5>
+            <hr>
+            <form name="movieForm"
+                  ng-class="{'was-validated': (movieForm.$invalid || movieForm.$submitted)}"
+                  ng-submit="movieCtrl.submit(movieForm)" ng-cloak novalidate>
+                <div class="form-group">
+                    <label for="movieName">Movie Name</label>
+                    <input type="text"
+                           id="movieName"
+                           name="name"
+                           class="form-control"
+                           placeholder="Enter name"
+                           data-ng-model="movieCtrl.movie.name"
+                           ng-required="true">
+                    <div class="form-error invalid-feedback"
+                         ng-messages="movieForm.name.$error"
+                         ng-if="movieForm.name.$dirty || movieForm.$submitted">
+                        <div ng-messages-include="form_errors.html"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="director">Director</label>
+                    <input type="text"
+                           id="director"
+                           name="director"
+                           class="form-control"
+                           placeholder="Enter director"
+                           data-ng-model="movieCtrl.movie.director"
+                           ng-required="true">
+
+                    <div class="form-error invalid-feedback"
+                         ng-messages="movieForm.director.$error"
+                         ng-if="movieForm.director.$dirty || movieForm.$submitted">
+                        <div ng-messages-include="form_errors.html"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="movieName">Writer</label>
+                    <input type="text"
+                           id="writer"
+                           class="form-control"
+                           placeholder="Enter writer"
+                           data-ng-model="movieCtrl.movie.writer">
+                </div>
+                <div class="form-group">
+                    <label for="cast">Enter the movies cast</label>
+                    <input type="text"
+                           id="cast"
+                           class="form-control"
+                           placeholder="Enter cast"
+                           data-ng-model="movieCtrl.movie.cast">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Movie Story Line / Description</label>
+                    <textarea class="form-control" id="description"
+                              rows="3"
+                              name="description"
+                              ng-model="movieCtrl.movie.description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="imdbScore">IMDB Score</label>
+                    <input type="text"
+                           id="imdbScore"
+                           class="form-control"
+                           placeholder="Enter name"
+                           name="imdbScore"
+                           data-ng-model="movieCtrl.movie.imdbScore">
+                </div>
+                <div class="form-group">
+                    <label for="popularity">Popularity</label>
+                    <input type="text"
+                           id="popularity"
+                           class="form-control"
+                           placeholder="popularity"
+                           name="popularity"
+                           data-ng-model="movieCtrl.movie.popularity">
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : (!movieCtrl.movieGenre.selectedMembers.length || movieForm.users.$invalid) && movieForm.$submitted }">
+                    <label class="control-label text-bold">Genres <span class="md-star-required">*</span>:</label>
+                    <div isteven-multi-select
+                         input-model="movieCtrl.movieGenre.genres"
+                         name="users"
+                         id="users"
+                         output-model="movieCtrl.movieGenre.selectedMembers"
+                         button-label="name"
+                         item-label="name"
+                         tick-property="ticked"
+                         max-height="150px"
+                         on-item-click="movieCtrl.onItemClick(data)"
+                         required
+                         helper-elements="filter">
+                    </div>
+                    <span ng-show="(!movieCtrl.chatChannel.selectedMembers.length || movieForm.users.$invalid) && movieForm.$submitted" class="help-block">Staff users is required.</span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</section>
