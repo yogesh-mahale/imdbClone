@@ -3,23 +3,70 @@
     margin-left:0
 }
 
-.content {
-    margin-top:50px;
-    width:100%
+.custom-header .company-logo {
+    height: 32px;
+    width: auto;
 }
 
-footer {
-    position:fixed;
-    left:0px;
-    bottom:0px;
-    height:30px;
-    width:100%;
-    background:#ddd;
-    -webkit-box-shadow:0 8px 6px 6px black;
-    -moz-box-shadow:0 8px 6px 6px black;
-    box-shadow:0 8px 6px 6px black
+.page-link {
+    color: #0b4dcc;
+}
+.page-link:hover {
+    color: #007bff;
 }
 
-footer p {
-    padding:5px 0 12px 10px
+.page-item.active .page-link {
+    background-color: #0b4dcc;
+    border-color: #0b4dcc;
 }
+
+.caret-blank {
+    padding-right: 20px;
+    position: relative;
+    float: right;
+    top: 12px;
+    right: -8px;
+}
+.caret-blank:before,
+.caret-blank:after {
+    border: 4px solid transparent;
+    content: "";
+    display: block;
+    height: 0;
+    right: 5px;
+    top: 50%;
+    position: absolute;
+    width: 0;
+}
+.caret-blank.caret-down:before {
+    border-bottom-color: #000;
+    margin-top: -9px;
+}
+.caret-blank:before {
+    border-bottom-color: #A7A7A7;
+    margin-top: -9px;
+}
+.caret-blank:after {
+    border-top-color: #A7A7A7;
+    margin-top: 1px;
+}
+.caret-blank.caret-up:after {
+    border-top-color: #000;
+    margin-top: 1px;
+}
+
+/* Dropdown style goes Here*/
+.dropdown.open > .dropdown-menu {
+    display: block;
+}
+
+.table-movie img {
+    height: 80px;
+}
+
+.table-movie td {
+    vertical-align: middle;
+}
+/*
+ * Content Header - contains the main content header
+ */
