@@ -1,3 +1,162 @@
-<section>
-	<h1>This is the home view</h1>
-</section>
+<div class="container p-3" ng-controller="MovieController as movieCtrl" ng-init="movieCtrl.initMovieList()">
+	<div class="">
+        <h4>Most Popular Movies and TV Shows</h4>
+        <hr>
+        <form name="movieFilterForm" ng-submit="movieCtrl.filterMovies(movieFilterForm)">
+		<div class="row">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Genres</a>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                <div class="row">
+                                    <div class="col-3" ng-repeat="item in movieCtrl.genres track by $index">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox"
+                                                   name="genreNames"
+                                                   data-ng-model="movieCtrl.filter.movie.genres[item.id]"
+                                                   class="custom-control-input"
+                                                   id="customCheck{{item.id}}">
+                                            <label class="custom-control-label" for="customCheck{{item.id}}">{{ item.name }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="btn-toolbar pull-right mb-3" role="toolbar">
+                    <div class="input-group search-wrapper">
+                        <input type="text" name="query" data-ng-model="movieCtrl.filter.movie.query" class="form-control" placeholder="Search by name...">
+                        <div class="input-group-append">
+                            <button class="btn input-group-text" ng-show="movieCtrl.filter.movie.query" ng-click="movieCtrl.searchMovies({'reset': true})">
+                                <i class="fa fa-close"></i>
+                            </button>
+                            <button type="submit" class="btn input-group-text" id="contentHeaderSearch">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+
+        <hr/>
+
+        <div class="table-responsive">
+            <table class="table table-borderless table-movie">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th class="sortable"
+                        sort
+                        by="order"
+                        reverse="reverse"
+                        column-name="'name'"
+                        order-by="movieCtrl.pagination.movie.orderBy"
+                        on-click="movieCtrl.sortMovies(options)"> <!-- note: options variable comes from directive. data is passed from directive as object and object key is considered here-->
+                        Movie name
+                    </th>
+                    <th scope="col"
+                        class="sortable"
+                        sort
+                        by="order"
+                        reverse="reverse"
+                        column-name="'director'"
+                        order-by="movieCtrl.pagination.movie.orderBy"
+                        on-click="movieCtrl.sortMovies(options)"
+                    >
+                        Director
+                    </th>
+                    <th scope="col"
+                        class="sortable"
+                        sort
+                        by="order"
+                        reverse="reverse"
+                        column-name="'popularity'"
+                        order-by="movieCtrl.pagination.movie.orderBy"
+                        on-click="movieCtrl.sortMovies(options)"
+                    >
+                        Popularity
+                    </th>
+                    <th scope="col"
+                        class="sortable"
+                        sort
+                        by="order"
+                        reverse="reverse"
+                        column-name="'imdbScore'"
+                        order-by="movieCtrl.pagination.movie.orderBy"
+                        on-click="movieCtrl.sortMovies(options)"
+                    >
+                        Imdb Score
+                    </th>
+                    <th scope="col">Genre</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in movieCtrl.movies track by $index">
+                    <th scope="row">{{ $index + 1 }}</th>
+                    <td>
+                        <a class="btn btn-link" href="javascript:" ui-sref="movies.view({'movieId': item.id})">
+                            <img class="img-thumbnail mr-3" src="{{ movieCtrl.defaultImg }}">
+                            {{ item.name }}
+                        </a>
+                    </td>
+                    <td>{{ item.director }}</td>
+                    <td>{{ item.popularity }}</td>
+                    <td>{{ item.imdbScore }}</td>
+                    <td>
+                            <span class="badge badge-info mr-1" ng-repeat="genre in item.Movie_genres track by $index">
+                                {{ genre.Genre.name }}
+                            </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <pagination
+                    class="pagination justify-content-end"
+                    total-items="movieCtrl.pagination.movie.count"
+                    page="movieCtrl.pagination.movie.page"
+                    max-size="maxSize"
+                    num-pages="movieCtrl.pagination.movie.pages"
+                    items-per-page="movieCtrl.pagination.movie.limitPerPage"
+                    on-select-page="movieCtrl.loadMoreMovies(page)"
+                    boundary-links="true"
+                    rotate="false">
+            </pagination>
+        </div>
+
+		<!--<div class="row">
+			<div class="col-4 mb-3" ng-repeat="item in movieCtrl.movies track by $index">
+				<div class="card">
+					&lt;!&ndash;<img class="card-img-top"
+						 alt="100%x180" src="{{ movieCtrl.defaultImg }}">&ndash;&gt;
+					<div class="card-body">
+						<h5 class="card-title">{{ item.name }}</h5>
+						<h5 class="card-title">{{ movieCtrl.movie.name }}</h5>
+						<p class="card-text">Popularity: {{ item.popularity }}</p>
+						<p class="card-text">Imdb Score: {{ item.imdbScore }}</p>
+						<p class="card-text">Director: {{ item.director }}</p>
+						<p class="card-text">Writer:  {{ item.writer }}</p>
+						<p class="card-text">Cast: {{ item.cast }}</p>
+					</div>
+					<div class="card-footer">
+						<span class="badge badge-info mr-1" ng-repeat="genre in item.Movie_genres track by $index">
+                        	{{ genre.Genre.name }}
+                    	</span>
+					</div>
+				</div>
+			</div>
+		</div>-->
+	</div>
+</div>
