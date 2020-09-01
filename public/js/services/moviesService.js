@@ -37,7 +37,7 @@ angular.module('imdbApp.user').factory("MoviesService", ['$resource', 'Global', 
             let deferred = $q.defer();
 
             let movie = $resource('/movies', {
-                apiKey: Global.user.apiKey
+                apiKey: _.get(Global, 'user.apiKey', '')
             });
 
             let scopes = [];
@@ -71,7 +71,7 @@ angular.module('imdbApp.user').factory("MoviesService", ['$resource', 'Global', 
             }
 
             let movie = $resource('/movies/:movieId', {
-                apiKey: Global.user.apiKey,
+                apiKey: _.get(Global, 'user.apiKey', ''),
                 movieId: '@movieId'
             });
 
@@ -203,7 +203,7 @@ angular.module('imdbApp.user').factory("MoviesService", ['$resource', 'Global', 
             let deferred = $q.defer();
 
             let genre = $resource('/genres', {
-                apiKey: Global.user.apiKey
+                apiKey: _.get(Global, 'user.apiKey', '')
             });
 
             let scopes = [];
@@ -237,7 +237,7 @@ angular.module('imdbApp.user').factory("MoviesService", ['$resource', 'Global', 
             }
 
             let genre = $resource('/genres/:genreId', {
-                apiKey: Global.user.apiKey,
+                apiKey: _.get(Global, 'user.apiKey', ''),
                 genreId: '@genreId'
             });
 

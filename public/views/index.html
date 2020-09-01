@@ -26,23 +26,39 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-6">
-                <div class="btn-toolbar pull-right mb-3" role="toolbar">
-                    <div class="input-group search-wrapper">
-                        <input type="text" name="query" data-ng-model="movieCtrl.filter.movie.query" class="form-control" placeholder="Search by name...">
-                        <div class="input-group-append">
-                            <button class="btn input-group-text" ng-show="movieCtrl.filter.movie.query" ng-click="movieCtrl.searchMovies({'reset': true})">
-                                <i class="fa fa-close"></i>
-                            </button>
-                            <button type="submit" class="btn input-group-text" id="contentHeaderSearch">
-                                Search
-                            </button>
+                <div class="d-flex justify-content-end align-items-center">
+                    <label>Sort</label>
+                    <div class="px-3">
+                        <select class="form-control" name="orderBy" ng-model="movieCtrl.pagination.movie.orderBy">
+                            <option value="popularity ASC" >Popularity ASC</option>
+                            <option value="popularity DESC">Popularity DESC</option>
+                            <option value="director ASC" >Director ASC</option>
+                            <option value="director DESC">Director DESC</option>
+                            <option value="imdbScore ASC">Imdb Rating ASC</option>
+                            <option value="imdbScore DESC">Imdb Rating DESC</option>
+                            <option value="name ASC">Movies Name ASC</option>
+                            <option value="name DESC">Movies Name DESC</option>
+                            <option value="addedOn ASC">Movies Date Added ASC</option>
+                            <option value="addedOn DESC">Movies Date Added DESC</option>
+                        </select>
+                    </div>
+                    <div class="btn-toolbar pull-right" role="toolbar">
+                        <div class="input-group search-wrapper">
+                            <input type="text" name="query" data-ng-model="movieCtrl.filter.movie.query" class="form-control" placeholder="Search by name...">
+                            <div class="input-group-append">
+                                <button class="btn input-group-text" title="Reset filters" ng-click="movieCtrl.searchMovies({'reset': true})">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                                <button type="submit" class="btn input-group-text" id="contentHeaderSearch">
+                                    Search
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,7 +115,7 @@
                     >
                         Imdb Score
                     </th>
-                    <th scope="col">Genre</th>
+                    <!--<th scope="col">Genre</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -114,11 +130,11 @@
                     <td>{{ item.director }}</td>
                     <td>{{ item.popularity }}</td>
                     <td>{{ item.imdbScore }}</td>
-                    <td>
+                    <!--<td>
                             <span class="badge badge-info mr-1" ng-repeat="genre in item.Movie_genres track by $index">
                                 {{ genre.Genre.name }}
                             </span>
-                    </td>
+                    </td>-->
                 </tr>
                 </tbody>
             </table>

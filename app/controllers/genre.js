@@ -15,73 +15,66 @@ var StandardError = require('standard-error'),
 
 
 exports.list = function (req, res) {
-    Authorization.hasAdminAccess(req, res).then(function (user) {
-        if (user.length) {
-            var limitPerPage = req.param('limitPerPage'),
-                limit = parseInt(limitPerPage),
-                offset = 0,
-                page = req.param('page'),
-                pages = 0,
-                criteria = req.param('criteria') ? JSON.parse(req.param('criteria')) : null;
+    var limitPerPage = req.param('limitPerPage'),
+        limit = parseInt(limitPerPage),
+        offset = 0,
+        page = req.param('page'),
+        pages = 0,
+        criteria = req.param('criteria') ? JSON.parse(req.param('criteria')) : null;
 
-            if (limit > 0) {
-                offset = limit * (page - 1);
+    if (limit > 0) {
+        offset = limit * (page - 1);
+    }
+
+    var options = {
+        where: {
+            status: {
+                ne: -1
             }
+        }
+    };
 
-            var options = {
-                where: {
-                    status: {
-                        ne: -1
+    if (criteria) {
+        if (_.has(criteria, 'where.query')) {
+            options.where = Object.assign(
+                options.where,
+                {
+                    name: {
+                        $like: `%${criteria.where.query}%`
                     }
                 }
-            };
-
-            if (criteria) {
-                if (_.has(criteria, 'where.query')) {
-                    options.where = Object.assign(
-                        options.where,
-                        {
-                            name: {
-                                $like: `%${criteria.where.query}%`
-                            }
-                        }
-                    );
-                }
-
-                if (_.has(criteria, 'where.status')) {
-                    options.where = Object.assign(
-                        options.where,
-                        {
-                            status: criteria.where.status
-                        }
-                    );
-                }
-            }
-
-            /*var scopes = [
-                {
-                    method: ['offsetLimit', {'offset': offset, 'limit': limit}]
-                },
-                {
-                    method: ['orderBy', req.param('orderBy')]
-                }
-            ];*/
-
-            db.Genre.findAndCountAll(options).then(function (result) {
-                pages = Math.ceil(result.count / limit);
-                return res.jsonp({
-                    'count': result.count,
-                    'page': parseInt(page),
-                    'offset': parseInt(offset),
-                    'limitPerPage': parseInt(limitPerPage),
-                    'pages': pages,
-                    'result': result.rows
-                });
-            });
-
-        } else {
-            return res.jsonp({error: true, message: 'Not authenticated user'});
+            );
         }
+
+        if (_.has(criteria, 'where.status')) {
+            options.where = Object.assign(
+                options.where,
+                {
+                    status: criteria.where.status
+                }
+            );
+        }
+    }
+
+    /*var scopes = [
+        {
+            method: ['offsetLimit', {'offset': offset, 'limit': limit}]
+        },
+        {
+            method: ['orderBy', req.param('orderBy')]
+        }
+    ];*/
+
+    db.Genre.findAndCountAll(options).then(function (result) {
+        pages = Math.ceil(result.count / limit);
+        return res.jsonp({
+            'count': result.count,
+            'page': parseInt(page),
+            'offset': parseInt(offset),
+            'limitPerPage': parseInt(limitPerPage),
+            'pages': pages,
+            'result': result.rows
+        });
     });
 };
 

@@ -29,7 +29,8 @@ angular.module('imdbApp').config(['$stateProvider','$urlRouterProvider', functio
         })
         .state('movies.list',{
             url : '/list',
-            templateUrl: 'views/movie/list.html'
+            templateUrl: 'views/movie/list.html',
+            resolve: { authenticate: authenticate }
         })
         .state('movies.add',{
             url : '/add',
@@ -91,6 +92,24 @@ angular.module('imdbApp').config(['$stateProvider','$urlRouterProvider', functio
             templateUrl: 'views/404.html'
         });
 }]);
+
+function authenticate($q, Global, $state, $timeout) {
+    if (_.get(Global, 'user.isAdmin', null)) {
+        // Resolve the promise successfully
+        return $q.when();
+    } else {
+        // The next bit of code is asynchronously tricky.
+
+        $timeout(function() {
+            // This code runs after the authentication promise has been rejected.
+            // Go to the log-in page
+            $state.go('login');
+        });
+
+        // Reject the authentication promise to prevent the state from loading
+        return $q.reject();
+    }
+}
 
 /*//Setting HTML5 Location Mode
 angular.module('imdbApp').config(['$locationProvider', function ($locationProvider) {

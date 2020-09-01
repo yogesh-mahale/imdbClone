@@ -10,7 +10,7 @@
                         <div class="input-group search-wrapper">
                             <input type="text" name="query" data-ng-model="movieCtrl.filter.movie.query" class="form-control" placeholder="Search by name...">
                             <div class="input-group-append">
-                                <button class="btn input-group-text" ng-show="movieCtrl.filter.movie.query" ng-click="movieCtrl.searchMovies({'reset': true})">
+                                <button class="btn input-group-text" title="Reset filters" ng-click="movieCtrl.searchMovies({'reset': true})">
                                     <i class="fa fa-close"></i>
                                 </button>
                                 <button class="btn input-group-text" id="contentHeaderSearch" ng-click="movieCtrl.searchMovies()">

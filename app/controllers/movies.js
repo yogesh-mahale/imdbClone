@@ -15,111 +15,103 @@ var StandardError = require('standard-error'),
 
 
 exports.list = function (req, res) {
-    Authorization.hasAdminAccess(req, res).then(function (user) {
-        if (user.length) {
-            var limitPerPage = req.param('limitPerPage'),
-                limit = parseInt(limitPerPage),
-                offset = 0,
-                page = req.param('page'),
-                pages = 0,
-                criteria = req.param('criteria') ? JSON.parse(req.param('criteria')) : null;
+    var limitPerPage = req.param('limitPerPage'),
+        limit = parseInt(limitPerPage),
+        offset = 0,
+        page = req.param('page'),
+        pages = 0,
+        criteria = req.param('criteria') ? JSON.parse(req.param('criteria')) : null;
 
-            if (limit > 0) {
-                offset = limit * (page - 1);
+    if (limit > 0) {
+        offset = limit * (page - 1);
+    }
+
+    var options = {
+        where: {
+            status: {
+                ne: -1
             }
-
-            var options = {
-                where: {
-                    status: {
-                        ne: -1
-                    }
-                }
-            };
-
-            if (criteria) {
-                if (_.has(criteria, 'where.query')) {
-                    options.where = Object.assign(
-                        options.where,
-                        {
-                            $or: [
-                                {
-                                    name: {
-                                        $like: `%${criteria.where.query}%`
-                                    }
-                                },
-                                {
-                                    director: {
-                                        $like: `%${criteria.where.query}%`
-                                    }
-                                }
-                            ]
-                        }
-                    );
-                }
-
-                if (_.has(criteria, 'where.genres')) {
-                    options = Object.assign(
-                        options,
-                        {
-                            include: [{
-                                model: db.Movie_genre,
-                                required: true,
-                                where: {
-                                    genreId: criteria.where.genres
-                                },
-                                include: [{
-                                    model: db.Genre,
-                                    required: false
-                                }]
-                            }]
-                        }
-                    );
-                }
-
-                if (_.has(criteria, 'where.status')) {
-                    options.where = Object.assign(
-                        options.where,
-                        {
-                            status: criteria.where.status
-                        }
-                    );
-                }
-            }
-
-            var scopes = [
-                {
-                    method: ['withAddedBy', {'params': null }]
-                },
-                {
-                    method: ['withUpdatedBy', {'params': null }]
-                },
-                {
-                    method: ['withMovieGenre', {'params': null }]
-                },
-                {
-                    method: ['offsetLimit', {'offset': offset, 'limit': limit}]
-                },
-                {
-                    method: ['orderBy', req.param('orderBy')]
-                }
-            ];
-
-
-            db.Movie.scope(scopes).findAndCountAll(options).then(function (result) {
-                pages = Math.ceil(result.count / limit);
-                return res.jsonp({
-                    'count': result.count,
-                    'page': parseInt(page),
-                    'offset': parseInt(offset),
-                    'limitPerPage': parseInt(limitPerPage),
-                    'pages': pages,
-                    'result': result.rows
-                });
-            });
-
-        } else {
-            return res.jsonp({error: true, message: 'Not authenticated user'});
         }
+    };
+
+    if (criteria) {
+        if (_.has(criteria, 'where.query')) {
+            options.where = Object.assign(
+                options.where,
+                {
+                    $or: [
+                        {
+                            name: {
+                                $like: `%${criteria.where.query}%`
+                            }
+                        },
+                        {
+                            director: {
+                                $like: `%${criteria.where.query}%`
+                            }
+                        }
+                    ]
+                }
+            );
+        }
+
+        if (_.has(criteria, 'where.genres')) {
+            options = Object.assign(
+                options,
+                {
+                    include: [{
+                        model: db.Movie_genre,
+                        required: true,
+                        where: {
+                            genreId: criteria.where.genres
+                        },
+                        include: [{
+                            model: db.Genre,
+                            required: false
+                        }]
+                    }]
+                }
+            );
+        }
+
+        if (_.has(criteria, 'where.status')) {
+            options.where = Object.assign(
+                options.where,
+                {
+                    status: criteria.where.status
+                }
+            );
+        }
+    }
+
+    var scopes = [
+        {
+            method: ['withAddedBy', {'params': null }]
+        },
+        {
+            method: ['withUpdatedBy', {'params': null }]
+        },
+        {
+            method: ['withMovieGenre', {'params': null }]
+        },
+        {
+            method: ['offsetLimit', {'offset': offset, 'limit': limit}]
+        },
+        {
+            method: ['orderBy', req.param('orderBy')]
+        }
+    ];
+
+    db.Movie.scope(scopes).findAndCountAll(options).then(function (result) {
+        pages = Math.ceil(result.count / limit);
+        return res.jsonp({
+            'count': result.count,
+            'page': parseInt(page),
+            'offset': parseInt(offset),
+            'limitPerPage': parseInt(limitPerPage),
+            'pages': pages,
+            'result': result.rows
+        });
     });
 };
 
@@ -257,6 +249,9 @@ exports.update = async function(req, res) {
             params[key] = value;
         }
 
+        params.updatedBy = user[0].id;
+        params.updatedOn = new Date();
+
         movie.updateAttributes(params);
 
         // Update the genres as well
@@ -284,6 +279,75 @@ exports.update = async function(req, res) {
         });
     } catch (err) {
         return res.send('404', {
+            error: true,
+            message: JSON.stringify(err),
+            status: 500
+        });
+    }
+};
+
+exports.import = async function (req, res) {
+    let user = await Authorization.hasAdminAccess(req, res);
+
+    if (!user) {
+        return res.jsonp({error: true, message: 'Not authenticated user'});
+    }
+
+
+    req.body.forEach(function(item, key) {
+        // Prepare request data. Get data from req.body and prepare it.
+        let params = {
+            name: item.name,
+            director: item.director,
+            writer: '',
+            cast: '',
+            description: '',
+            imdbScore: item['imdb_score'],
+            status: 1,
+            popularity: item['99popularity'],
+            addedBy: user[0].id,
+            addedOn: new Date(),
+            updatedBy: user[0].id,
+            updatedOn: new Date()
+        };
+
+        let genres = item['genre'];
+
+
+        return res.jsonp({
+            params: params,
+            genres: genres,
+            body: req.body
+        });
+    });
+
+    return res.jsonp({
+        success: true,
+        body: req.body
+    });
+
+    debugger;
+    try {
+        let movie = await db.Movie.create(params);
+
+        // Update the genres as well
+        if (genres) {
+            genres.forEach(async function(item) {
+                let options = {
+                    movieId: movie.id,
+                    genreId: item.id
+                };
+
+                let movieGenre = await db.Movie_genre.create(options);
+            });
+        };
+
+        return res.jsonp({
+            success: true,
+            movie: movie
+        });
+    } catch (err) {
+        return res.send('500', {
             error: true,
             message: JSON.stringify(err),
             status: 500

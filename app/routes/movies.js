@@ -25,6 +25,8 @@ module.exports = function(app) {
     // Get movie
     app.route('/movies/:movieId').get(movieCtrl.view);
 
+    app.route('/import/movies').post(movieCtrl.import);
+
 
     ///////////////////// Genre ///////////////////////////////
     // List

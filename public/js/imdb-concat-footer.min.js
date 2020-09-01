@@ -1,4 +1,5 @@
-var app = angular.module('imdbApp', ['ngCookies', 'ngResource', 'ui.router', 'ngSanitize', 'ui.bootstrap',  'ngMessages', 'ngRoute', 'ngAnimate', 'isteven-multi-select',
+
+authenticate.$inject = ['$q', 'Global', '$state', '$timeout'];var app = angular.module('imdbApp', ['ngCookies', 'ngResource', 'ui.router', 'ngSanitize', 'ui.bootstrap',  'ngMessages', 'ngRoute', 'ngAnimate', 'isteven-multi-select',
     'ui-notification', 'imdbApp.system', 'imdbApp.auth', 'imdbApp.user']);
 
 angular.module('imdbApp.system', []);
@@ -36,7 +37,8 @@ angular.module('imdbApp').config(['$stateProvider','$urlRouterProvider', functio
         })
         .state('movies.list',{
             url : '/list',
-            templateUrl: 'views/movie/list.html'
+            templateUrl: 'views/movie/list.html',
+            resolve: { authenticate: authenticate }
         })
         .state('movies.add',{
             url : '/add',
@@ -98,6 +100,24 @@ angular.module('imdbApp').config(['$stateProvider','$urlRouterProvider', functio
             templateUrl: 'views/404.html'
         });
 }]);
+
+function authenticate($q, Global, $state, $timeout) {
+    if (_.get(Global, 'user.isAdmin', null)) {
+        // Resolve the promise successfully
+        return $q.when();
+    } else {
+        // The next bit of code is asynchronously tricky.
+
+        $timeout(function() {
+            // This code runs after the authentication promise has been rejected.
+            // Go to the log-in page
+            $state.go('login');
+        });
+
+        // Reject the authentication promise to prevent the state from loading
+        return $q.reject();
+    }
+}
 
 /*//Setting HTML5 Location Mode
 angular.module('imdbApp').config(['$locationProvider', function ($locationProvider) {
@@ -217,7 +237,7 @@ angular.module('imdbApp.user').factory("MoviesService", ['$resource', 'Global', 
             let deferred = $q.defer();
 
             let movie = $resource('/movies', {
-                apiKey: Global.user.apiKey
+                apiKey: _.get(Global, 'user.apiKey', '')
             });
 
             let scopes = [];
@@ -251,7 +271,7 @@ angular.module('imdbApp.user').factory("MoviesService", ['$resource', 'Global', 
             }
 
             let movie = $resource('/movies/:movieId', {
-                apiKey: Global.user.apiKey,
+                apiKey: _.get(Global, 'user.apiKey', ''),
                 movieId: '@movieId'
             });
 
@@ -383,7 +403,7 @@ angular.module('imdbApp.user').factory("MoviesService", ['$resource', 'Global', 
             let deferred = $q.defer();
 
             let genre = $resource('/genres', {
-                apiKey: Global.user.apiKey
+                apiKey: _.get(Global, 'user.apiKey', '')
             });
 
             let scopes = [];
@@ -417,7 +437,7 @@ angular.module('imdbApp.user').factory("MoviesService", ['$resource', 'Global', 
             }
 
             let genre = $resource('/genres/:genreId', {
-                apiKey: Global.user.apiKey,
+                apiKey: _.get(Global, 'user.apiKey', ''),
                 genreId: '@genreId'
             });
 
@@ -752,7 +772,8 @@ angular.module('imdbApp.user').controller('MovieController', ['$scope', '$window
     vm.filter = {
         movie: {
             query: null,
-            genres: null
+            genres: null,
+            orderBy: null
         }
     };
 
@@ -888,12 +909,25 @@ angular.module('imdbApp.user').controller('MovieController', ['$scope', '$window
      */
     vm.resetMoviesParams = function () {
         vm.movies = [];
-        vm.pagination.movie = {
+        /*vm.pagination.movie = {
             count: 0,
             page: 1,
             pages: 1,
             limitPerPage: 10,
-            orderBy: 'updatedOn DESC'
+            orderBy: 'addedOn DESC'
+        };*/
+
+        vm.pagination.movie.count = 0;
+        vm.pagination.movie.page = 1;
+        vm.pagination.movie.pages = 1;
+        vm.pagination.movie.limitPerPage = 10;
+
+        vm.filter = {
+            movie: {
+                query: null,
+                genres: null,
+                orderBy: null
+            }
         };
     };
 
@@ -938,10 +972,9 @@ angular.module('imdbApp.user').controller('MovieController', ['$scope', '$window
             return false;
         }
 
+        //vm.resetMoviesParams();
         //2. Reset the params
         if (_.get(vm.filter, 'movie.query', null)) {
-            vm.resetMoviesParams();
-
             let params = {
                 page: vm.pagination.movie.page,
                 limitPerPage: vm.pagination.movie.limitPerPage,
@@ -982,9 +1015,6 @@ angular.module('imdbApp.user').controller('MovieController', ['$scope', '$window
             vm.getMovies();
             return false;
         }
-
-        //2. Reset movies list
-        vm.resetMoviesParams();
 
         //3. Prepare params
         let params = {

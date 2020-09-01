@@ -43,7 +43,8 @@ angular.module('imdbApp.user').controller('MovieController', ['$scope', '$window
     vm.filter = {
         movie: {
             query: null,
-            genres: null
+            genres: null,
+            orderBy: null
         }
     };
 
@@ -179,12 +180,25 @@ angular.module('imdbApp.user').controller('MovieController', ['$scope', '$window
      */
     vm.resetMoviesParams = function () {
         vm.movies = [];
-        vm.pagination.movie = {
+        /*vm.pagination.movie = {
             count: 0,
             page: 1,
             pages: 1,
             limitPerPage: 10,
-            orderBy: 'updatedOn DESC'
+            orderBy: 'addedOn DESC'
+        };*/
+
+        vm.pagination.movie.count = 0;
+        vm.pagination.movie.page = 1;
+        vm.pagination.movie.pages = 1;
+        vm.pagination.movie.limitPerPage = 10;
+
+        vm.filter = {
+            movie: {
+                query: null,
+                genres: null,
+                orderBy: null
+            }
         };
     };
 
@@ -229,10 +243,9 @@ angular.module('imdbApp.user').controller('MovieController', ['$scope', '$window
             return false;
         }
 
+        //vm.resetMoviesParams();
         //2. Reset the params
         if (_.get(vm.filter, 'movie.query', null)) {
-            vm.resetMoviesParams();
-
             let params = {
                 page: vm.pagination.movie.page,
                 limitPerPage: vm.pagination.movie.limitPerPage,
@@ -273,9 +286,6 @@ angular.module('imdbApp.user').controller('MovieController', ['$scope', '$window
             vm.getMovies();
             return false;
         }
-
-        //2. Reset movies list
-        vm.resetMoviesParams();
 
         //3. Prepare params
         let params = {
